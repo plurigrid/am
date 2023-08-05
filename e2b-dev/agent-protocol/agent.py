@@ -1,26 +1,26 @@
 ```python
+import uuid
+from .message import Message
+from .queue import TaskQueue
+
 class Agent:
-    def __init__(self, id, intercode):
-        self.id = id
-        self.intercode = intercode
-        self.tasks_completed = 0
+    def __init__(self, name):
+        self.id = uuid.uuid4()
+        self.name = name
+        self.task_queue = TaskQueue()
 
     def bid(self, task, bid_amount):
-        return {
-            'agent_id': self.id,
-            'task_id': task.id,
-            'bid_amount': bid_amount
-        }
+        message = Message(sender=self.id, task=task, bid_amount=bid_amount)
+        self.task_queue.add_message(message)
 
-    def execute_task(self, task):
-        execution_result, feedback = self.intercode.execute(task.code)
-        if execution_result:
-            self.tasks_completed += 1
-        return execution_result, feedback
+    def perform_task(self, task):
+        if task in self.task_queue.tasks:
+            # Perform the task
+            print(f"Agent {self.name} is performing task {task.id}")
+            self.task_queue.remove_task(task)
+        else:
+            print(f"Task {task.id} is not in the task queue of Agent {self.name}")
 
-    def send_message(self, message_content):
-        return {
-            'agent_id': self.id,
-            'message_content': message_content
-        }
+    def receive_task(self, task):
+        self.task_queue.add_task(task)
 ```

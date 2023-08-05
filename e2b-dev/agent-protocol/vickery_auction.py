@@ -1,23 +1,32 @@
 ```python
-from .auction import Auction
-from .bid import Bid
+from queue import PriorityQueue
+from agent import Agent
+from message import Message
 
-class VickeryAuction(Auction):
-    def __init__(self, task):
-        super().__init__(task)
-        self.highest_bid = None
-        self.second_highest_bid = None
+class VickeryAuction:
+    def __init__(self):
+        self.bids = PriorityQueue()
+        self.messages = []
 
-    def place_bid(self, bid: Bid):
-        if not self.highest_bid or bid.amount > self.highest_bid.amount:
-            self.second_highest_bid = self.highest_bid
-            self.highest_bid = bid
-        elif not self.second_highest_bid or bid.amount > self.second_highest_bid.amount:
-            self.second_highest_bid = bid
+    def place_bid(self, agent: Agent, bid: int):
+        self.bids.put((-bid, agent))
 
-    def get_winner(self):
-        return self.highest_bid.agent if self.highest_bid else None
+    def send_message(self, message: Message):
+        self.messages.append(message)
 
-    def get_price(self):
-        return self.second_highest_bid.amount if self.second_highest_bid else 0
+    def run_auction(self):
+        if self.bids.qsize() < 2:
+            raise Exception("Not enough bids to run the auction")
+
+        highest_bid = self.bids.get()
+        second_highest_bid = self.bids.get()
+
+        winner_message = Message(highest_bid[1], "You won the auction with a bid of " + str(-highest_bid[0]))
+        self.send_message(winner_message)
+
+        price_message = Message(highest_bid[1], "The price you need to pay is " + str(-second_highest_bid[0]))
+        self.send_message(price_message)
+
+    def get_messages(self):
+        return self.messages
 ```

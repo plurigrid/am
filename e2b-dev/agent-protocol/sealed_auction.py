@@ -1,19 +1,28 @@
 ```python
-from .auction import Auction
-from .bid import Bid
-from .task import Task
-from .agent import Agent
+from queue import Queue
+from message import Message
+from agent import Agent
 
-class SealedAuction(Auction):
-    def __init__(self, task: Task):
-        super().__init__(task)
-        self.bids = []
+class SealedAuction:
+    def __init__(self):
+        self.bids = {}
+        self.queue = Queue()
 
-    def place_bid(self, agent: Agent, bid: Bid):
-        self.bids.append((agent, bid))
+    def add_task(self, task):
+        self.queue.put(task)
+
+    def add_bid(self, agent: Agent, task, bid):
+        if task not in self.bids:
+            self.bids[task] = []
+        self.bids[task].append((agent, bid))
 
     def resolve_auction(self):
-        winning_bid = max(self.bids, key=lambda x: x[1].amount)
-        self.task.assign_to(winning_bid[0])
-        return winning_bid
+        while not self.queue.empty():
+            task = self.queue.get()
+            if task in self.bids:
+                bids = self.bids[task]
+                bids.sort(key=lambda x: x[1], reverse=True)
+                winner = bids[0][0]
+                winner.receive_message(Message("You won the auction for task: " + task))
+                self.bids.pop(task)
 ```

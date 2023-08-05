@@ -1,17 +1,23 @@
 ```python
-import queue
-from task import Task
+import threading
+from collections import deque
 
 class TaskQueue:
     def __init__(self):
-        self._queue = queue.Queue()
+        self.queue = deque()
+        self.lock = threading.Lock()
 
-    def add_task(self, task: Task):
-        self._queue.put(task)
+    def add_task(self, task):
+        with self.lock:
+            self.queue.append(task)
 
-    def get_task(self) -> Task:
-        return self._queue.get()
+    def get_task(self):
+        with self.lock:
+            if not self.is_empty():
+                return self.queue.popleft()
+            else:
+                return None
 
-    def is_empty(self) -> bool:
-        return self._queue.empty()
+    def is_empty(self):
+        return len(self.queue) == 0
 ```

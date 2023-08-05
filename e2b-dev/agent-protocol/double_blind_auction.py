@@ -1,20 +1,25 @@
 ```python
-from auction import Auction
-from bid import Bid
+from queue import Queue
+from message import Message
+from agent import Agent
 
-class DoubleBlindAuction(Auction):
-    def __init__(self, task):
-        super().__init__(task)
-        self.bids = []
+class DoubleBlindAuction:
+    def __init__(self):
+        self.bids = Queue()
+        self.winners = []
 
-    def place_bid(self, bid: Bid):
-        self.bids.append(bid)
+    def place_bid(self, agent: Agent, bid: int):
+        message = Message(agent, bid)
+        self.bids.put(message)
 
     def resolve_auction(self):
-        winning_bid = max(self.bids, key=lambda bid: bid.amount)
-        self.task.assign_to(winning_bid.agent)
-        self.task.set_price(winning_bid.amount)
+        highest_bid = None
+        while not self.bids.empty():
+            message = self.bids.get()
+            if highest_bid is None or message.content > highest_bid.content:
+                highest_bid = message
+        self.winners.append(highest_bid.sender)
 
-    def get_bids(self):
-        return self.bids
+    def get_winners(self):
+        return self.winners
 ```

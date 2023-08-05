@@ -1,29 +1,19 @@
 Shared Dependencies:
 
-1. **Agent**: This is a class or object that is shared across all files. It represents the agents that interact with the system.
+1. **Auction Types**: The auction types (sealed, double-blind, vickery) are shared across the auction files and their corresponding test files. They define the rules and procedures for the auctions.
 
-2. **Task**: This is a class or object that represents the tasks that agents can bid on and carry out.
+2. **Agent**: The agent is a shared entity across the agent-protocol files and their corresponding test files. It represents the bidding entity in the auctions.
 
-3. **Bid**: This is a class or object that represents the bids made by agents on tasks.
+3. **Queue**: The queue is a shared concept across the agent-protocol files and their corresponding test files. It represents the list of tasks that agents can bid on.
 
-4. **Message**: This is a class or object that represents the messages passed between agents and the system.
+4. **Message**: The message is a shared concept across the agent-protocol files and their corresponding test files. It represents the communication medium between agents.
 
-5. **Queue**: This is a data structure that holds the tasks that agents can bid on.
+5. **InterCode**: InterCode is a shared framework across the InterCode files and their corresponding test files. It provides the environment for interactive coding.
 
-6. **Auction**: This is a class or object that represents the different types of auctions (sealed, double-blind, vickery) that the system can hold.
+6. **Bash Environment and SQL Environment**: These are shared across the InterCode files and their corresponding test files. They represent the action spaces for interactive coding.
 
-7. **InterCode**: This is a framework that is used across multiple files for interactive coding.
+7. **Seq2Seq, ReAct, PlanAndSolve**: These are shared methods across the InterCode files and their corresponding test files. They represent different prompting strategies for interactive code generation.
 
-8. **Execution Feedback**: This is a class or object that represents the feedback from the execution of code.
+8. **CaptureTheFlag**: This is a shared task across the InterCode files and their corresponding test files. It represents a multi-step coding puzzle.
 
-9. **Reinforcement Learning (RL)**: This is a method used across multiple files for learning from the execution feedback.
-
-10. **Docker Environment**: This is a class or object that represents the Docker environments used for safe and reproducible execution.
-
-11. **Bash Environment and SQL Environment**: These are classes or objects that represent the different coding environments available.
-
-12. **ReAct Strategy and Plan & Solve Strategy**: These are classes or objects that represent the different prompting strategies used in the InterCode framework.
-
-13. **Capture the Flag**: This is a class or object that represents a coding puzzle task.
-
-Please note that these are high-level shared dependencies. The actual shared dependencies including function names, variable names, etc. would be determined during the actual coding process.
+Please note that the shared dependencies are inferred based on the file names and the provided context. The actual shared dependencies may vary based on the implementation details of these files.
